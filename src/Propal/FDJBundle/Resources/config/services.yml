@@ -1,0 +1,4 @@
+services:
+#    propal_fdj.example:
+#        class: Propal\FDJBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

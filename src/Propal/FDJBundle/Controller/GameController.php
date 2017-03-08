@@ -1,0 +1,85 @@
+<?php
+
+namespace Propal\FDJBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\Annotations\Prefix;
+use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Propal\FDJBundle\Model\Logger;
+
+/**
+ * @Prefix("")
+ * @NamePrefix("propal_fdj_game_")
+ * @RouteResource("Game")
+ */
+class GameController extends FOSRestController
+{
+    /**
+     * Get list of games per status
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   section = "Game",
+     *   description = "Get list of games per status",
+     *   output = "string",
+     *   statusCodes = {
+     *     200 = "Returned when found",
+     *     404 = "Returned when the status is invalid"
+     *   },
+     *   parameters = {
+     *   },
+     *     tags={
+     *         "dev-master" = "cyan",
+     *     },
+     * )
+     * @param status Status
+     */
+
+    public function getAction($status, Request $request)
+    {
+	$response = new JsonResponse();	
+	if($status == '0' || $status == '1')
+	{
+		/**
+		 * send the data list
+		 */
+		$dm = $this->getDoctrine()->getManager();
+		$games = $dm->getRepository('PropalFDJBundle:Game')->findByStatus($status);
+		$output = array();
+		foreach($games as $game)
+		{
+			$output[] = array(
+				'id' => $game->getId(),	
+				'title' => $game->getTitle(),
+				'href' => $game->getHref(),
+				'img' => $game->getImg(),		
+			);
+		}
+		$response->setData(array('status' => $status,'count' => count($games),'output' => $output));
+		$response->setStatusCode(200);
+	}
+	else
+	{
+		/**
+		 * generate 404
+		 */
+		$response->setData(array('errmsg' => 'invalid status'));
+		
+		/**
+		 * insert message into a txt file
+		 */
+		$root_dir = realpath($this->get('kernel')->getRootDir().'/../var/logs');		
+		$message = new \Propal\FDJBundle\Model\Logger($root_dir,'logger_bad_status');
+		$message->add('error','attempt to call method with status "'.$status.'"');
+		$response->setStatusCode(404);
+	}
+        return $response;
+    }
+}

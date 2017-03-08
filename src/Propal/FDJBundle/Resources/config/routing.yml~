@@ -1,0 +1,4 @@
+propal_fdj_api:
+    type: rest
+    prefix: /v1.0.0
+    resource: "Propal\FDJBundle\Controller\GameController"

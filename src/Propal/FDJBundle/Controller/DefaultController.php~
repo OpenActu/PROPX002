@@ -1,0 +1,46 @@
+<?php
+
+namespace Propal\FDJBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use FOS\RestBundle\Controller\FOSRestController;
+use Symfony\Component\HttpFoundation\Request;
+
+class DefaultController extends FOSRestController
+{
+    /**
+     * Mise à jour d'une adresse pour un utilisateur
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   section = "Address",
+     *   description = "Update datas for an address of specific customer",
+     *   output = "string",
+     *   statusCodes = {
+     *     200 = "Returned when deleted",
+     *     404 = "Returned when the site is not found"
+     *   },
+     *   parameters = {
+     *      {"name"="postal_code", "dataType"="string","required"=false,"description"="code postal"},
+     *      {"name"="insee_code", "dataType"="string","required"=false,"description"="code insee"},
+     *      {"name"="section_1", "dataType"="string","required"=false,"description"="adresse 1"},
+     *      {"name"="section_2", "dataType"="string","required"=false,"description"="adresse 2"},
+     *      {"name"="section_3", "dataType"="string","required"=false,"description"="adresse 3"},
+     *      {"name"="section_4", "dataType"="string","required"=false,"description"="adresse 4"},
+     *      {"name"="city", "dataType"="string","required"=false,"description"="ville"},
+     *      {"name"="type", "dataType"="string","required"=false,"description"="type d'adresse ('delivery', 'bill')"},
+     *      {"name"="country_code_3c", "dataType"="string","required"=false,"description"="code pays à 3 caractères"},
+     *      {"name"="is_first", "dataType"="boolean","required"=false,"description"="adresse de référence ? (défaut: false)"},
+     *   },
+     *     tags={
+     *         "dev-master" = "cyan",
+     *     },
+     * )
+     * @param Request  request (name required)
+     */
+    public function getGameAction()
+    {
+        return $this->render('PropalFDJBundle:Default:index.html.twig');
+    }
+}

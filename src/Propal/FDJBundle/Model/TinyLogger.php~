@@ -1,0 +1,21 @@
+<?php
+namespace Propal\FDJBundle\Model;
+
+class TinyLogger
+{
+	
+	const INFO	= 'info';
+	const DEBUG 	= 'debug';
+	const WARNING	='warning';
+
+	private $directory;
+	private $filename;
+
+	public function add($level=const::INFO, $info)
+	{
+		echo 'x';die;
+		$date = new \DateTime();
+		$log  =$date->format('Y-m-d h:i:s');
+		echo $log;die;
+	}
+}
